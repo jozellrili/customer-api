@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Services\Importer\ImporterInterface;
 use App\Services\Importer\ImporterService;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
@@ -13,10 +12,11 @@ class FetchUserCommand extends Command
      * Console command name
      * @var string
      */
-    protected $signature = 'user:fetch';
+    protected $signature = 'user:fetch {count=10} {nationality=au}';
 
     /**
      * Console command description
+     *
      * @var string
      */
     protected $description = 'Fetch users from RandomMe API';
@@ -26,7 +26,6 @@ class FetchUserCommand extends Command
      */
     public function handle(ImporterService $importerService)
     {
-        $users = $importerService->fetchUsers(2, 'au');
-        dump($users);
+        $importerService->fetchUsers($this->argument('count'), $this->argument('nationality'));
     }
 }
