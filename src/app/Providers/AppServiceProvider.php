@@ -4,8 +4,8 @@ namespace App\Providers;
 
 use App\Services\Importer\ApiResponseValidation;
 use App\Services\Importer\ImporterService;
+use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,7 +21,8 @@ class AppServiceProvider extends ServiceProvider
             return new ImporterService(
                 $this->app->get(ApiResponseValidation::class),
                 $this->app->get(Client::class),
-                Config::get('random_user_api.url')
+                $this->app->get(EntityManagerInterface::class),
+                \config('random_user_api.url')
             );
         });
     }

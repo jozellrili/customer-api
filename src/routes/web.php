@@ -16,3 +16,8 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+Route::group(['prefix' => '/customers'], function() {
+    Route::get('/', 'CustomerController@getCustomers');
+    Route::get('/{id}', 'CustomerController@getCustomerById');
+});

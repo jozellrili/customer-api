@@ -24,10 +24,10 @@ return [
             'meta'       => env('DOCTRINE_METADATA', 'annotations'),
             'connection' => env('DB_CONNECTION', 'mysql'),
             'namespaces' => [
-                'App'
+                'App\\Entities'
             ],
             'paths'      => [
-                base_path('app')
+                base_path('app/Entities')
             ],
             'repository' => Doctrine\ORM\EntityRepository::class,
             'proxies'    => [
