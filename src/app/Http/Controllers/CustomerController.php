@@ -3,17 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Entities\Customer;
+use App\Services\Customer\CustomerService;
 use App\Services\Customer\CustomerTransformer;
-use Doctrine\ORM\EntityManagerInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 
 class CustomerController extends Controller
 {
     /**
-     * @var EntityManagerInterface
+     * @var CustomerService
      */
-    private EntityManagerInterface $entityManager;
+    private CustomerService $service;
 
     /**
      * @var CustomerTransformer
@@ -21,12 +21,12 @@ class CustomerController extends Controller
     private CustomerTransformer $transformer;
 
     /**
-     * @param EntityManagerInterface $entityManager
+     * @param CustomerService $service
      * @param CustomerTransformer $transformer
      */
-    public function __construct(EntityManagerInterface $entityManager, CustomerTransformer $transformer)
+    public function __construct(CustomerService $service, CustomerTransformer $transformer)
     {
-        $this->entityManager = $entityManager;
+        $this->service = $service;
         $this->transformer = $transformer;
     }
 
@@ -37,7 +37,7 @@ class CustomerController extends Controller
     {
         $data = [];
         try {
-            $customers = $this->entityManager->getRepository(Customer::class)->findAll();
+            $customers = $this->service->findAll();
             $data = $this->transformer->transformBulkData(json_decode(json_encode($customers)));
         } catch (\Exception $e) {
             $data['error'] = $e->getMessage();
@@ -53,12 +53,12 @@ class CustomerController extends Controller
     public function getCustomerById(int $id): JsonResponse
     {
         try {
-            $validator = validator()->make([$id], ['id' => 'required|integer']);
+            $validator = validator()->make(['id' => $id], ['id' => 'required|integer']);
             if ($validator->fails()) {
                 throw new ValidationException($validator->messages());
             }
 
-            $customer = $this->entityManager->getRepository(Customer::class)->find($id);
+            $customer = $this->service->findById($id);
 
             $data = ['message' => 'User not found!'];
             if ($customer instanceof Customer) {

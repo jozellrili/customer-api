@@ -3,6 +3,7 @@
 namespace App\Services\Importer;
 
 use App\Entities\Customer;
+use App\Repositories\CustomerRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
@@ -18,15 +19,19 @@ class ImporterService implements ImporterInterface
 
     private EntityManagerInterface $entityManager;
 
+    private CustomerRepository $customerRepository;
+
     public function __construct(
         ApiResponseValidation $apiResponseValidation,
         Client $client,
         EntityManagerInterface $entityManager,
+        CustomerRepository $customerRepository,
         string $apiUrl)
     {
         $this->client = $client;
         $this->apiResponseValidation = $apiResponseValidation;
         $this->entityManager = $entityManager;
+        $this->customerRepository = $customerRepository;
         $this->apiUrl = $apiUrl;
     }
 
@@ -76,7 +81,14 @@ class ImporterService implements ImporterInterface
 
     private function saveFetchedUsers(array $user)
     {
-        $customer = new Customer();
+        $existingCustomer = $this->customerRepository->findByEmail($user['email']);
+
+        if (count($existingCustomer)) {
+            $customer = $this->customerRepository->find($existingCustomer[0]->getId());
+        } else {
+            $customer = new Customer();
+        }
+
         $customer->setFirstName($user['first_name']);
         $customer->setLastName($user['last_name']);
         $customer->setGender($user['gender']);
