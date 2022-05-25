@@ -68,6 +68,7 @@ class ImporterService implements ImporterInterface
                 }
             }
 
+            $this->entityManager->flush();
         } catch (BadResponseException $e) {
             return [
                 'error' => $e->getMessage(),
@@ -102,6 +103,5 @@ class ImporterService implements ImporterInterface
         $customer->setUpdatedAt();
 
         $this->entityManager->persist($customer);
-        $this->entityManager->flush();
     }
 }

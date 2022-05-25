@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Entities\Customer;
+use App\Repositories\Contracts\CustomerRepositoryInterface;
 use App\Repositories\CustomerRepository;
 use App\Services\Customer\CustomerService;
 use App\Services\Importer\ApiResponseValidation;
@@ -20,6 +21,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->bind(
+            CustomerRepositoryInterface::class,
+            CustomerRepository::class
+        );
+
         $this->app->bind(CustomerRepository::class, function ($app) {
             // This is what Doctrine's EntityRepository needs in its constructor.
             return new CustomerRepository(
@@ -33,13 +39,13 @@ class AppServiceProvider extends ServiceProvider
                 $this->app->get(ApiResponseValidation::class),
                 $this->app->get(Client::class),
                 $this->app->get(EntityManagerInterface::class),
-                $this->app->get(CustomerRepository::class),
+                $this->app->get(CustomerRepositoryInterface::class),
                 \config('random_user_api.url')
             );
         });
 
         $this->app->bind(CustomerService::class, function () {
-            return new CustomerService($this->app->get(CustomerRepository::class));
+            return new CustomerService($this->app->get(CustomerRepositoryInterface::class));
         });
     }
 }

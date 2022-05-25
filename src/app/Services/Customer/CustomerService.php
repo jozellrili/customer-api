@@ -2,13 +2,13 @@
 
 namespace App\Services\Customer;
 
-use App\Repositories\CustomerRepository;
+use App\Repositories\Contracts\CustomerRepositoryInterface;
 
 class CustomerService
 {
-    private CustomerRepository $repository;
+    private CustomerRepositoryInterface $repository;
 
-    public function __construct(CustomerRepository $repository)
+    public function __construct(CustomerRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
