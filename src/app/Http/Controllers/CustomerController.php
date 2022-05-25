@@ -6,6 +6,7 @@ use App\Entities\Customer;
 use App\Services\Customer\CustomerTransformer;
 use Doctrine\ORM\EntityManagerInterface;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\ValidationException;
 
 class CustomerController extends Controller
 {
@@ -52,8 +53,17 @@ class CustomerController extends Controller
     public function getCustomerById(int $id): JsonResponse
     {
         try {
+            $validator = validator()->make([$id], ['id' => 'required|integer']);
+            if ($validator->fails()) {
+                throw new ValidationException($validator->messages());
+            }
+
             $customer = $this->entityManager->getRepository(Customer::class)->find($id);
-            $data = $this->transformer->transformData($customer);
+
+            $data = ['message' => 'User not found!'];
+            if ($customer instanceof Customer) {
+                $data = $this->transformer->transformData($customer);
+            }
         } catch (\Exception $e) {
             $data['error'] = $e->getMessage();
         }

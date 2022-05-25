@@ -83,7 +83,7 @@ class ImporterService implements ImporterInterface
         $customer->setCity($user['city']);
         $customer->setCountry($user['country']);
         $customer->setUsername($user['username']);
-        $customer->setPassword($user['password']);
+        $customer->setPassword(md5($user['password']));
         $customer->setPhone($user['phone']);
         $customer->setEmail($user['email']);
         $customer->setCreatedAt();
