@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Services\Importer\ImporterInterface;
 use App\Services\Importer\ImporterService;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
 
 class FetchUserCommand extends Command
@@ -20,15 +21,12 @@ class FetchUserCommand extends Command
      */
     protected $description = 'Fetch users from RandomMe API';
 
-    public function handle()
+    /**
+     * @throws GuzzleException
+     */
+    public function handle(ImporterService $importerService)
     {
-        try {
-            $importer = new ImporterService();
-            $users = $importer->fetchUsers(100, 'au');
-
-            dump($users);
-        } catch (\Exception $e) {
-            $this->error('n error occurred: ' . $e->getMessage());
-        }
+        $users = $importerService->fetchUsers(2, 'au');
+        dump($users);
     }
 }

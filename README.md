@@ -23,6 +23,11 @@ db_root_password.txt
 docker-compose up -d
 ```
 
+- Database Migration
+```
+php artisan migrate
+```
+
 - To fetch user
 ```
 php artisan user:fetch
