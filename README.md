@@ -22,27 +22,39 @@ db_root_password.txt
 
 ## Useful commands
 
+### Fresh installation
+```
+make init
+```
 ### Start Container
 - To start container
 ```
-docker-compose up -d
+make start
 ```
 
 ### Database Migration
 - To check for migration diffs
 ```
-php artisan doctrine:migrations:diff
+make migrate-diff
 ```
 - To start migration
 ```
-php artisan doctrine:migrations:migrate
+make migrate
 ```
 
 ## Console Commands
 - To fetch user from the API and save to database
+
+Artisan:
 ```
 php artisan user:fetch
 ```
+
+Make:
+```
+make fetch 
+```
+
 - Fetch user with parameter
 
 Parameter is optional and by default the value for count is `10` and nationality is `au`
