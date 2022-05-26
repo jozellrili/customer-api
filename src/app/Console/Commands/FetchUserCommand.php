@@ -26,6 +26,6 @@ class FetchUserCommand extends Command
      */
     public function handle(ImporterService $importerService)
     {
-        $importerService->fetchUsers($this->argument('count'), $this->argument('nationality'));
+        $importerService->fetchUsers((int)$this->argument('count'), $this->argument('nationality'));
     }
 }
