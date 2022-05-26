@@ -60,16 +60,15 @@ class CustomerController extends Controller
 
             $customer = $this->service->findById($id);
 
-            $data = ['message' => 'User not found!'];
-            $statusCode = parent::$statusCodeNotFound;
-
-            if ($customer instanceof Customer) {
-                $data = $this->transformer->transformData($customer);
-                $statusCode = parent::$statusCodeOk;
+            if (!$customer instanceof Customer) {
+                throw new \Exception('User not found!');
             }
+
+            $statusCode = parent::$statusCodeOk;
+            $data = $this->transformer->transformData($customer);
         } catch (\Exception $e) {
+            $statusCode = parent::$statusCodeBadRequest;
             $data['error'] = $e->getMessage();
-            $statusCode = parent::$statusCodeInternalServerError;
         }
 
         return response()->json($data, $statusCode);
