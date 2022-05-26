@@ -23,12 +23,18 @@ db_root_password.txt
 docker-compose up -d
 ```
 
-- Database Migration
+## Database Migration
+- To check for migration diffs
 ```
-php artisan migrate
+php artisan doctrine:migrations:diff
+```
+- To start migration
+```
+php artisan doctrine:migrations:migrate
 ```
 
-- To fetch user
+## Console Commands
+- To fetch user from the API and save to database
 ```
 php artisan user:fetch
 ```
