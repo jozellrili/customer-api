@@ -8,12 +8,15 @@ class CustomerService
 {
     private CustomerRepositoryInterface $repository;
 
+    /**
+     * @param CustomerRepositoryInterface $repository
+     */
     public function __construct(CustomerRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
 
-    public function findAll()
+    public function findAll(): array
     {
         return $this->repository->findAll();
     }

@@ -3,6 +3,7 @@
 namespace App\Services\Importer;
 
 use App\Entities\Customer;
+use App\Repositories\Contracts\CustomerRepositoryInterface;
 use App\Repositories\CustomerRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use GuzzleHttp\Client;
@@ -19,13 +20,20 @@ class ImporterService implements ImporterInterface
 
     private EntityManagerInterface $entityManager;
 
-    private CustomerRepository $customerRepository;
+    private CustomerRepositoryInterface $customerRepository;
 
+    /**
+     * @param ApiResponseValidation $apiResponseValidation
+     * @param Client $client
+     * @param EntityManagerInterface $entityManager
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param string $apiUrl
+     */
     public function __construct(
         ApiResponseValidation $apiResponseValidation,
         Client $client,
         EntityManagerInterface $entityManager,
-        CustomerRepository $customerRepository,
+        CustomerRepositoryInterface $customerRepository,
         string $apiUrl)
     {
         $this->client = $client;
