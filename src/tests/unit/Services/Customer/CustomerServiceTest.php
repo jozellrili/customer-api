@@ -23,18 +23,7 @@ class CustomerServiceTest extends \TestCase
 
     public function testFindByIdSuccess()
     {
-        $newCustomer = new Customer();
-        $newCustomer->setFirstName('Jane');
-        $newCustomer->setLastName('Doe');
-        $newCustomer->setGender('female');
-        $newCustomer->setCity('Norwa');
-        $newCustomer->setCountry('Australia');
-        $newCustomer->setUsername('jane.doe');
-        $newCustomer->setPassword(md5('securepass123'));
-        $newCustomer->setPhone('06-9063-9944');
-        $newCustomer->setEmail('jane.doe@example.com');
-        $newCustomer->setCreatedAt();
-        $newCustomer->setUpdatedAt();
+        $newCustomer = entity(Customer::class, 'customer')->make();;
 
         $this->customerRepositoryMock
             ->shouldReceive('find')
